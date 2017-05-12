@@ -32,8 +32,8 @@ import math
 
 DEFAULT_TRAJECTORY = "RANDOM"		#RANDOM, or URI with routes/locations file $LOCATION_FILENAME
 DEFAULT_ROUTES_FILENAME = "routes.csv"
-DEFAULT_LATITUDE = 41.411338		#SF bay
-DEFAULT_LONGITUDE = 2.226438
+DEFAULT_LATITUDE = 37.875693		#SF bay
+DEFAULT_LONGITUDE = 122.258669
 #DEFAULT_LATITUDE = 40.773860		#NYC central park
 #DEFAULT_LONGITUDE = -73.970813
 DEFAULT_RADIUS = 300
@@ -278,6 +278,7 @@ if __name__ == "__main__":
 		route_index=0
 		#correct initial location to be in the route
 		actor['location'] = format_location(route[route_index].rstrip())
+		print("**DEBUG: Location initialized from index {0} of {1} to {2}".format(start_pos, File_location, actor['location']))		
 	else:
 		print("**INFO: Trajectory is random")
 
