@@ -276,6 +276,8 @@ if __name__ == "__main__":
 		f=open(File_location)
 		route=list(yieldlines(f,route_range))
 		route_index=0
+		#correct initial location to be in the route
+		actor['location'] = format_location(route[route_index].rstrip())
 	else:
 		print("**INFO: Trajectory is random")
 
