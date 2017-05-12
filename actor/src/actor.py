@@ -359,7 +359,7 @@ if __name__ == "__main__":
 		#wait a random amount of time
 		wait_interval = Wait_secs_seed*int(random_number( length=1 ))
 		print("**INFO: I'm going to wait here for {0} seconds.".format(wait_interval))
-		time.sleep(wait_interval)
+		time.sleep(int(wait_interval))
 
 		#randomly decide if moving
 		move_on = ( random.randrange(100) < Moving_chance )
