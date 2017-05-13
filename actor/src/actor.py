@@ -365,13 +365,13 @@ if __name__ == "__main__":
 			#randomly decide where to move to, in a radius or from a set of locations in a trajectory.
 			print("**INFO: Let's move somewhere else.")
 			current_lat, current_lon = actor["location"].split(",")
-			print("**INFO:  My current location is {0},{1}".format( current_lat, current_lon ))
+			print("**INFO: My current location is {0},{1}".format( current_lat, current_lon ))
 			if Trajectory == "RANDOM":
 				new_location = random_location( current_lat, current_lon, Radius )
 			else:	#trajectory comes from a file and has been put on the "route" list
 				new_location = format_location(route[route_index].rstrip())
 				route_index +=1					#continue along the route of set points
-			print("**INFO:  My new location will be {0}".format( new_location ) )		
+			print("**INFO: My new location will be {0}".format( new_location ) )		
 			distance = calculate_distance( actor['location'], new_location )
 			print("**INFO: I'm going to move {0} meters".format( distance ) )
 			
