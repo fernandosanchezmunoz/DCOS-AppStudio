@@ -34,10 +34,8 @@ DEFAULT_TRAJECTORY = "RANDOM"		#RANDOM, or URI with routes/locations file $LOCAT
 DEFAULT_ROUTES_FILENAME = "routes.csv"
 DEFAULT_LATITUDE = 37.875693		#SF bay
 DEFAULT_LONGITUDE = 122.258669
-#DEFAULT_LATITUDE = 40.773860		#NYC central park
-#DEFAULT_LONGITUDE = -73.970813
 DEFAULT_RADIUS = 300
-DEFAULT_MY_ID_LENGTH = 6			#up to 1 million users - integer
+DEFAULT_MY_ID_LENGTH = 6
 DEFAULT_AGE_MAX = 60
 DEFAULT_AGE_MIN = 16
 DEFAULT_TEMP_MAX = 100
@@ -86,10 +84,9 @@ def random_for_type( field ):
 	if my_type == "Long": return random_number( length=5 )
 	if my_type == "Double": return random_number( min=(-1)*random_number( length=7 ) , \
 							max=random_number( length=7 ) )			
-	if my_type == "Location": return str(fake.latitude())+","+str(fake.longitude()) 
+	if my_type == "Location": return random_location( Latitude, Longitude, Radius ) 
 	if ( my_type == "Date/time" or my_type == "Date/Time" ): 
-		date = fake.iso8601()[:-3]+'Z' #fake date -- ANY date || Converted to Zulu for Kibana
-		#date = datetime.datetime.now().isoformat()
+		date = fake.iso8601()[:-3]+'Z' #random date, converted to Zulu for Kibana
 		return(date)
 
 	print('**ERROR: random_for_type: my_type is not detected')
@@ -248,9 +245,9 @@ if __name__ == "__main__":
 	Temp_max = os.getenv('TEMP_MAX', DEFAULT_TEMP_MAX)
 	Speed_min = os.getenv('SPEED_MIN', DEFAULT_SPEED_MIN)
 	Speed_max = os.getenv('SPEED_MAX', DEFAULT_SPEED_MAX)
-	Wait_secs_seed = os.getenv('WAIT_SECS_SEED', DEFAULT_WAIT_SECS_SEED)
-	Moving_chance = os.getenv('MOVING_CHANCE', DEFAULT_MOVING_CHANCE)
-	Suicide_chance = os.getenv('SUICIDE_CHANCE', DEFAULT_SUICIDE_CHANCE)
+	Wait_secs_seed = float(os.getenv('WAIT_SECS_SEED', DEFAULT_WAIT_SECS_SEED))
+	Moving_chance = int(os.getenv('MOVING_CHANCE', DEFAULT_MOVING_CHANCE))
+	Suicide_chance = int(os.getenv('SUICIDE_CHANCE', DEFAULT_SUICIDE_CHANCE))
 
 	#Initialize actor
 	actor = {}
@@ -302,18 +299,18 @@ if __name__ == "__main__":
 
 		#skip well-known fields
 		if field['name'] in RESERVED_FIELDS: 
-			print('**DEBUG: RESERVED field: {0} | value: {1}'.format( field['name'], actor[field['name']] ) )
+			print('**DEBUG: RESERVED field: {0} : {1}'.format( field['name'], actor[field['name']] ) )
 			continue
 
 		#Customize values that makes sense for well-known fields
 		actor[field['name']] = realistic_for_type( field )
 		if actor[field['name']]:					#it's a known field so it was populated as realistic
-			print('**DEBUG: KNOWN field: {0} | realistic: {1}'.format( field['name'], actor[field['name']] ) )
+			print('**DEBUG: REALISTIC field: {0} : {1}'.format( field['name'], actor[field['name']] ) )
 			continue
 
 		#Any field that is not well-known and LEARNED from APPDEF, fill it with random stuff
 		actor[field['name']] = random_for_type( field )
-		print('**DEBUG: LEARNED field: {0} | randomized: {1}'.format( field['name'], actor[field['name']] ) )
+		print('**DEBUG: RANDOM field: {0} : {1}'.format( field['name'], actor[field['name']] ) )
 
 	# Main loop
 	while True:
@@ -357,7 +354,7 @@ if __name__ == "__main__":
 			sys.exit(0)
 
 		#wait a random amount of time
-		wait_interval = float(Wait_secs_seed)*int(random_number( length=1 ))
+		wait_interval = Wait_secs_seed*int(random_number( length=1 ))
 		print("**INFO: I'm going to wait here for {0} seconds.".format(wait_interval))
 		time.sleep(wait_interval)
 
