@@ -574,7 +574,7 @@
   {
   "id": "actor",
   "instances": 2,
-  "cpus": 0.01,
+  "cpus": 0.1,
   "mem": 64,
   "disk": 0,
   "gpus": 0,
